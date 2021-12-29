@@ -65,6 +65,6 @@ int64_t Object__GetHashCode(Object this)
 
 void Object__DefineMethods(Object this)
 {
-    DEFINE_METHOD(Object, Finalize, 0);
-    DEFINE_METHOD(Object, GetHashCode, 0);
+    DefineMethod(Object, Finalize, 0);
+    DefineMethod(Object, GetHashCode, 0);
 }

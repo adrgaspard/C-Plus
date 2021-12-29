@@ -79,14 +79,17 @@ StringManager StringManager__Append(const string toAppend, StringManager this)
 
 void StringManager__DefineMethods(StringManager this)
 {
+    // Call super class method
     Object__DefineMethods((Object)this);
-    DEFINE_METHOD(StringManager, Finalize, 0);
-    DEFINE_METHOD(StringManager, GetValue, 0);
-    DEFINE_METHOD(StringManager, SetValue, 1);
-    DEFINE_METHOD(StringManager, EqualsTo, 1);
-    DEFINE_METHOD(StringManager, CompareTo, 1);
-    DEFINE_METHOD(StringManager, GetLength, 0);
-    DEFINE_METHOD(StringManager, Append, 1);
+
+    // StringManager new methods
+    DefineMethod(StringManager, Finalize, 0);
+    DefineMethod(StringManager, GetValue, 0);
+    DefineMethod(StringManager, SetValue, 1);
+    DefineMethod(StringManager, EqualsTo, 1);
+    DefineMethod(StringManager, CompareTo, 1);
+    DefineMethod(StringManager, GetLength, 0);
+    DefineMethod(StringManager, Append, 1);
 }
 
 StringManager StringManager__New(const string value)

@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include "Primitives.h"
 
-#define DEFINE_METHOD(objectType, methodName, argCount)                                            \
+#define DefineMethod(objectType, methodName, argCount)                                             \
     do                                                                                             \
     {                                                                                              \
         this->methodName = Object__Trampoline((Object)this, objectType##__##methodName, argCount); \
