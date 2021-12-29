@@ -1,100 +1,99 @@
 #include <string.h>
 #include <malloc.h>
+#include <stdlib.h> // TODO REMOVE
 
-#include "../lib/C+/StringManager.h"
-#include "../lib/C+/Exception.h"
+#include "../lib/StringManager.h"
 
-void StringManager_finalize(FinalizeOptions options, StringManager* this)
+void StringManager__Finalize(StringManager this)
 {
-    this->setValue(NULL);
-    this->base.finalize();
+    this->SetValue(NULL);
+    Object__Finalize((Object)this);
 }
 
-string StringManager_getValue(StringManager* this)
+string StringManager__GetValue(StringManager this)
 {
-    return this->value;
+    return this->_value;
 }
 
-StringManager* StringManager_setValue(const string value, StringManager* this)
+StringManager StringManager__SetValue(const string value, StringManager this)
 {
-    if (this->getValue() != NULL)
+    if (this->GetValue() != NULL)
     {
-        free(this->value);
+        free(this->_value);
     }
     if (value == NULL)
     {
-        this->value = NULL;
+        this->_value = NULL;
     }
     else
     {
-        this->value = (string)calloc(strlen(value) + 1, sizeof(char));
-        if (!this->value)
+        this->_value = (string)calloc(strlen(value) + 1, sizeof(char));
+        if (!this->_value)
         {
-            EXCEPTION(MEMORY_ALLOCATION_EXCEPTION);
+            //EXCEPTION(MEMORY_ALLOCATION_EXCEPTION); TODO
+            exit(1);
         }
-        strcpy(this->value, value);
+        strcpy(this->_value, value);
     }
     return this;
 }
 
-bool StringManager_equalsTo(const string other, StringManager* this)
+bool StringManager__EqualsTo(const string other, StringManager this)
 {
-    return this->compareTo(other) == 0;
+    return this->CompareTo(other) == 0;
 }
 
-int StringManager_compareTo(const string other, StringManager* this)
+int StringManager__CompareTo(const string other, StringManager this)
 {
-    return strcmp(this->getValue(), other);
+    return strcmp(this->GetValue(), other);
 }
 
-int StringManager_getLength(StringManager* this)
+int StringManager__GetLength(StringManager this)
 {
-    if (this->getValue() == NULL)
+    if (this->GetValue() == NULL)
     {
         return 0;
     }
-    return strlen(this->getValue());
+    return strlen(this->GetValue());
 }
 
-StringManager* StringManager_append(const string toAppend, StringManager* this)
+StringManager StringManager__Append(const string toAppend, StringManager this)
 {
     if (toAppend == NULL || strcmp(toAppend, "") == 0)
     {
         return this;
     }
-    if (this->getValue() == NULL || this->equalsTo(""))
+    if (this->GetValue() == NULL || this->EqualsTo(""))
     {
-        this->setValue(toAppend);
+        this->SetValue(toAppend);
     }
-    this->value = (string)realloc(this->value, (strlen(this->value) + strlen(toAppend) + 1) * sizeof(char));
-    if (!this->value)
+    this->_value = (string)realloc(this->_value, (strlen(this->_value) + strlen(toAppend) + 1) * sizeof(char));
+    if (!this->_value)
     {
-        EXCEPTION(MEMORY_ALLOCATION_EXCEPTION);
+        //EXCEPTION(MEMORY_ALLOCATION_EXCEPTION); TODO
+        exit(1);
     }
-    strcat(this->value, toAppend);
+    strcat(this->_value, toAppend);
     return this;
 }
 
-void StringManager_DefineMethods(StringManager* this)
+void StringManager__DefineMethods(StringManager this)
 {
-    Object_DefineMethods((Object*)this);
-    METHOD(StringManager, finalize, 1);
-    METHOD(StringManager, getValue, 0);
-    METHOD(StringManager, setValue, 1);
-    METHOD(StringManager, equalsTo, 1);
-    METHOD(StringManager, compareTo, 1);
-    METHOD(StringManager, getLength, 0);
-    METHOD(StringManager, append, 1);
+    Object__DefineMethods((Object)this);
+    DEFINE_METHOD(StringManager, Finalize, 0);
+    DEFINE_METHOD(StringManager, GetValue, 0);
+    DEFINE_METHOD(StringManager, SetValue, 1);
+    DEFINE_METHOD(StringManager, EqualsTo, 1);
+    DEFINE_METHOD(StringManager, CompareTo, 1);
+    DEFINE_METHOD(StringManager, GetLength, 0);
+    DEFINE_METHOD(StringManager, Append, 1);
 }
 
-StringManager* StringManager_New(const string value)
+StringManager StringManager__New(const string value)
 {
-
-    StringManager* this = (StringManager*)Base_New(sizeof(StringManager), STRINGMANAGER_METHOD_COUNT);
-    StringManager_DefineMethods(this);
-    Base_Prepare(&this->base);
-
-    this->setValue(value);
-
+    StringManager this = (StringManager)Object__New(sizeof(stringManager_t), STRINGMANAGER_METHOD_COUNT);
+    StringManager__DefineMethods(this);
+    Object__Prepare((Object)this);
+    this->SetValue(value);
     return this;
 }

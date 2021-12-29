@@ -1,12 +1,13 @@
 #include <stdio.h>
-#include "../lib/C+/StringManager.h"
-#include "../lib/C+/Exception.h"
+#include "../lib/Primitives.h"
+#include "../lib/Object.h"
+#include "../lib/StringManager.h"
 
 int main()
 {
-	StringManager* sm = StringManager_New("test")->append("yes");
-	printf("%s\n", sm->getValue());
-	printf("%ld\n", ((Object*)sm)->getHashCode());
-	EXCEPTION("Mon exception de test");
-	return (0);
+    StringManager sm = StringManager__New("test")->Append("yes");
+	printf("%s\n", sm->GetValue());
+	printf("%ld\n", ((Object)sm)->GetHashCode());
+    printf("Ok !\n");
+	return 0;
 }
